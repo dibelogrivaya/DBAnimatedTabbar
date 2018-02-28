@@ -29,5 +29,11 @@ Pod::Spec.new do |s|
   s.platform     = :ios, "9.0"
   s.source       = { :git => "git@github.com:dibelogrivaya/DBAnimatedTabbar.git", :tag => s.version }
   s.source_files  = "DBAnimatedTabbar"
+  s.subspec 'Animations' do |ss|
+    ss.source_files = 'DBAnimatedTabbar/Animations'
+  end
+  s.subspec 'Badge' do |ss|
+    ss.source_files = 'DBAnimatedTabbar/Badge'
+  end
   s.requires_arc = true
 end
