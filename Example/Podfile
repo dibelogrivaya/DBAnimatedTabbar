@@ -1,0 +1,11 @@
+source 'git@github.com:dibelogrivaya/db-specs.git'
+
+platform :ios, '9.0'
+
+project 'Example'
+
+target 'Example' do
+  pod 'DBAnimatedTabbar'
+end
+
+
