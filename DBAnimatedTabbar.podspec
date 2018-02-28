@@ -32,8 +32,5 @@ Pod::Spec.new do |s|
   s.subspec 'Animations' do |ss|
     ss.source_files = 'DBAnimatedTabbar/Animations'
   end
-  s.subspec 'Badge' do |ss|
-    ss.source_files = 'DBAnimatedTabbar/Badge'
-  end
   s.requires_arc = true
 end
