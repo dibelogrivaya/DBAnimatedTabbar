@@ -2,9 +2,9 @@
 
 Animated tabbar.
 
-[![Platform](https://img.shields.io/badge/platform-iOS-lightgrey.svg)](https://github.com/dibelogrivaya/DBChatAvatarView)
+[![Platform](https://img.shields.io/badge/platform-iOS-lightgrey.svg)](https://github.com/dibelogrivaya/DBAnimatedTabbar)
 [![Xcode](https://img.shields.io/badge/Xcode-9.0-blue.svg)](https://developer.apple.com/xcode)
-![Downloads Month](https://img.shields.io/cocoapods/dm/DBChatAvatarView.svg)
+![Downloads Month](https://img.shields.io/cocoapods/dm/DBAnimatedTabbar.svg)
 
 ## Installation
 
