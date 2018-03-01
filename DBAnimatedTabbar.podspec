@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "DBAnimatedTabbar"
-  s.version      = "1.0.1"
+  s.version      = "1.0.2"
   s.summary      = "Animated tabbar"
   s.homepage     = "https://github.com/dibelogrivaya/DBAnimatedTabbar"
   s.license      = { :type => "MIT", :file => "LICENSE" }

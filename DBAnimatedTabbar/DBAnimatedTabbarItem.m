@@ -93,7 +93,7 @@
     [container addConstraint:[NSLayoutConstraint constraintWithItem:icon attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:icon attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
     [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[textLabel]-5-|" options:NSLayoutFormatAlignAllCenterX metrics:nil views:NSDictionaryOfVariableBindings(textLabel)]];
     [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(>=5)-[icon]-(>=5)-|" options:NSLayoutFormatAlignAllCenterX metrics:nil views:NSDictionaryOfVariableBindings(icon)]];
-    [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[icon]-5-[textLabel]-5-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(icon, textLabel)]];
+    [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[icon]-3-[textLabel(15)]-3-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(icon, textLabel)]];
     [textLabel setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisVertical];
     
     self.image = nil;
