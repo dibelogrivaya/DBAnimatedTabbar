@@ -28,7 +28,6 @@
 }
 
 - (void)setupItem {
-    self.yOffSet = .0f;
     self.selectedColor = [UIColor blueColor];
     self.unselectedColor = [UIColor blackColor];
     self.itemLabelFont = [UIFont systemFontOfSize:11.f];
@@ -68,7 +67,7 @@
     return self.animation;
 }
 
-- (void)addItemOnView:(UIView *)view maxWidth:(CGFloat)maxWidth {
+- (void)addItemOnContainer:(UIView *)container {
     UIImageRenderingMode renderMode = [self.unselectedColor isEqual:[UIColor clearColor]] ? UIImageRenderingModeAlwaysOriginal : UIImageRenderingModeAlwaysTemplate;
     UIImage *iconImage = self.image ?: self.itemIcon.image;
     UIImageView *icon = [[UIImageView alloc] initWithImage:iconImage ? [iconImage imageWithRenderingMode:renderMode] : nil];
@@ -76,10 +75,7 @@
     icon.tintColor = self.unselectedColor;
     icon.highlightedImage = self.selectedImage ? [self.selectedImage imageWithRenderingMode:renderMode] : nil;
     icon.alpha = self.enabled ? 1.f : .5f;
-    [view addSubview:icon];
-    
-    CGSize itemSize = CGSizeEqualToSize(self.image.size, CGSizeZero) ? CGSizeZero : CGSizeMake(30, 30);
-    [self createConstraintsForView:icon container:view size:itemSize yOffset:-5 - self.yOffSet];
+    [container addSubview:icon];
     
     UILabel *textLabel = [UILabel new];
     textLabel.text = (self.title == nil || self.title.length == 0) ? self.itemLabel.text : self.title;
@@ -89,56 +85,18 @@
     textLabel.textAlignment = NSTextAlignmentCenter;
     textLabel.translatesAutoresizingMaskIntoConstraints = NO;
     textLabel.alpha = self.enabled ? 1.f : .5f;
-    [view addSubview:textLabel];
+    [container addSubview:textLabel];
     
-    [self createConstraintsForView:textLabel container:view width:maxWidth height:0 yOffset:16 - self.yOffSet];
+    [container addConstraint:[NSLayoutConstraint constraintWithItem:icon attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:container attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+    [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[textLabel]-5-|" options:NSLayoutFormatAlignAllCenterX metrics:nil views:NSDictionaryOfVariableBindings(textLabel)]];
+    [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(>=5)-[icon]-(>=5)-|" options:NSLayoutFormatAlignAllCenterX metrics:nil views:NSDictionaryOfVariableBindings(icon)]];
+    [container addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[icon]-5-[textLabel]-5-|" options:NSLayoutFormatAlignAllCenterX metrics:nil views:NSDictionaryOfVariableBindings(icon, textLabel)]];
     
     self.image = nil;
     self.title = nil;
     
     _itemLabel = textLabel;
     _itemIcon = icon;
-}
-
-- (void)createConstraintsForView:(UIView *)view container:(UIView *)container size:(CGSize)size yOffset:(CGFloat)yOffset {
-    [self createConstraintsForView:view container:container width:size.width height:size.height yOffset:yOffset];
-}
-
-- (void)createConstraintsForView:(UIView *)view container:(UIView *)container width:(CGFloat)width height:(CGFloat)height yOffset:(CGFloat)yOffset {
-    [container addConstraint:[NSLayoutConstraint constraintWithItem:view
-                                                          attribute:NSLayoutAttributeCenterX
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:container
-                                                          attribute:NSLayoutAttributeCenterX
-                                                         multiplier:1
-                                                           constant:0]];
-    [container addConstraint:[NSLayoutConstraint constraintWithItem:view
-                                                          attribute:NSLayoutAttributeCenterY
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:container
-                                                          attribute:NSLayoutAttributeCenterY
-                                                         multiplier:1
-                                                           constant:yOffset]];
-    
-    if (width > CGFLOAT_MIN) {
-        [view addConstraint:[NSLayoutConstraint constraintWithItem:view
-                                                         attribute:NSLayoutAttributeWidth
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:nil
-                                                         attribute:NSLayoutAttributeNotAnAttribute
-                                                        multiplier:1
-                                                          constant:width]];
-    }
-    
-    if (height > CGFLOAT_MIN) {
-        [view addConstraint:[NSLayoutConstraint constraintWithItem:view
-                                                         attribute:NSLayoutAttributeHeight
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:nil
-                                                         attribute:NSLayoutAttributeNotAnAttribute
-                                                        multiplier:1
-                                                          constant:height]];
-    }
 }
 
 - (void)deselect {

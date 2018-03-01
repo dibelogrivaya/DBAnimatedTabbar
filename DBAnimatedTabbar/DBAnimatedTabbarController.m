@@ -21,18 +21,6 @@ static NSString * const kDBContainerIdentifier = @"container";
 
 @implementation DBAnimatedTabbarController
 
-- (void)setViewControllers:(NSArray<__kindof UIViewController *> *)viewControllers {
-    [super setViewControllers:viewControllers];
-    
-    [self resetTabbarContainers];
-}
-
-- (void)setViewControllers:(NSArray<__kindof UIViewController *> * __nullable)viewControllers animated:(BOOL)animated {
-    [super setViewControllers:viewControllers animated:animated];
-    
-    [self resetTabbarContainers];
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -94,6 +82,34 @@ static NSString * const kDBContainerIdentifier = @"container";
     return viewContainer;
 }
 
+- (void)setSelectedIndex:(NSUInteger)selectedIndex {
+    NSArray <DBAnimatedTabbarItem *> *animatedItems = [self animatedTabbarItems];
+    if (animatedItems.count == 0) {
+        [super setSelectedIndex:selectedIndex];
+        return;
+    }
+    
+    BOOL firstSelection = (self.selectedIndex == NSNotFound);
+    
+    DBAnimatedTabbarItem *currentItem = (DBAnimatedTabbarItem *)animatedItems[selectedIndex];
+    [currentItem selectAnimated:!firstSelection];
+    UIView *container = [currentItem.itemIcon superview];
+    if (container) {
+        container.backgroundColor =  currentItem.containerSelectedColor;
+    }
+    
+    if (!firstSelection && self.selectedIndex != selectedIndex) {
+        DBAnimatedTabbarItem *deselectItem = (DBAnimatedTabbarItem *)animatedItems[self.selectedIndex];
+        UIView *containerPrevious = [deselectItem.itemIcon superview];
+        if (containerPrevious) {
+            containerPrevious.backgroundColor = currentItem.containerUnselectedColor;
+        }
+        [deselectItem deselect];
+    }
+    
+    [super setSelectedIndex:selectedIndex];
+}
+
 - (void)handleTap:(UIGestureRecognizer *)gesture {
     if (gesture.view == nil) { return; }
     
@@ -106,22 +122,7 @@ static NSString * const kDBContainerIdentifier = @"container";
     
     UIViewController *controller = self.childViewControllers[currentIndex];
     if (self.selectedIndex != currentIndex) {
-        [currentItem selectAnimated:YES];
-        
-        DBAnimatedTabbarItem *deselectItem = (DBAnimatedTabbarItem *)animatedItems[self.selectedIndex];
-        UIView *containerPrevious = [deselectItem.itemIcon superview];
-        if (containerPrevious) {
-            containerPrevious.backgroundColor = currentItem.containerUnselectedColor;
-        }
-        [deselectItem deselect];
-        
-        UIView *container = [currentItem.itemIcon superview];
-        if (container) {
-            container.backgroundColor =  currentItem.containerSelectedColor;
-        }
-        
-        self.selectedIndex = gesture.view.tag;
-
+        self.selectedIndex = currentIndex;
     } else if (self.selectedIndex == currentIndex) {
         id selectedController = self.viewControllers[self.selectedIndex];
         if ([selectedController isKindOfClass:[UINavigationController class]]) {
@@ -146,13 +147,10 @@ static NSString * const kDBContainerIdentifier = @"container";
         item.tag = idx;
         container.backgroundColor = [(DBAnimatedTabbarItem *)animatedItems[idx] containerUnselectedColor];
         
-        [item addItemOnView:container maxWidth:(CGRectGetWidth(self.tabBar.frame) / animatedItems.count -  5.f)];
-        
-        if (idx == 0) {
-            [item selectAnimated:NO];
-            container.backgroundColor = [(DBAnimatedTabbarItem *)animatedItems[idx] containerSelectedColor];
-        }
+        [item addItemOnContainer:container];
     }];
+    
+    self.selectedIndex = 0;
 }
 
 - (BOOL)isTabbarSupportAnimation {

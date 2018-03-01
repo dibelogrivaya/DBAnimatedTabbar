@@ -25,10 +25,7 @@
 @property (strong, nonatomic) UIColor *containerSelectedColor;
 @property (strong, nonatomic) UIColor *containerUnselectedColor;
 
-@property (assign, nonatomic) CGFloat yOffSet;
-
-- (void)addItemOnView:(UIView *)view
-             maxWidth:(CGFloat)maxWidth;
+- (void)addItemOnContainer:(UIView *)container;
 
 - (void)selectAnimated:(BOOL)animated;
 - (void)deselect;
